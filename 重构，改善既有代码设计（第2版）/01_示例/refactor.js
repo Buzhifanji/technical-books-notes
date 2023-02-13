@@ -2,6 +2,32 @@
  * 这个函数代码组织不清晰
  */
 export function refactorStatement(invoice, plays) {
+  /**
+   *  提炼函数
+   */
+  function amountFor(perf, play) {
+    let result = 0;
+    switch (play.type) {
+      case "tragedy":
+        result = 40000;
+        if (perf.audience > 30) {
+          result += 1000 * (perf.audience - 30);
+        }
+        break;
+      case "comedy":
+        result = 30000;
+        if (perf.audience > 20) {
+          result += 10000 + 500 * (perf.audience - 20);
+        }
+        result += 300 * perf.audience;
+        break;
+      default:
+        throw new Error(`unknown type: ${play.type}`);
+    }
+
+    return result;
+  }
+
   let totalAmount = 0;
   let volumeCredits = 0;
   let result = `Statement for ${invoice.customer}\n`;
@@ -27,31 +53,5 @@ export function refactorStatement(invoice, plays) {
   }
   result += `Amount owed is ${format(totalAmount / 100)}\n`;
   result += `You earned ${volumeCredits} credits\n`;
-  return result;
-}
-
-/**
- *  提炼函数
- */
-function amountFor(perf, play) {
-  let result = 0;
-  switch (play.type) {
-    case "tragedy":
-      result = 40000;
-      if (perf.audience > 30) {
-        result += 1000 * (perf.audience - 30);
-      }
-      break;
-    case "comedy":
-      result = 30000;
-      if (perf.audience > 20) {
-        result += 10000 + 500 * (perf.audience - 20);
-      }
-      result += 300 * perf.audience;
-      break;
-    default:
-      throw new Error(`unknown type: ${play.type}`);
-  }
-
   return result;
 }
