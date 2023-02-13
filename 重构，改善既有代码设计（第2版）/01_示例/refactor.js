@@ -2,9 +2,7 @@
  * 这个函数代码组织不清晰
  */
 export function refactorStatement(invoice, plays) {
-  /**
-   *  提炼函数
-   */
+  // 提炼函数
   function amountFor(perf, play) {
     let result = 0;
     switch (play.type) {
@@ -28,6 +26,11 @@ export function refactorStatement(invoice, plays) {
     return result;
   }
 
+  // 以查询取代临时变量
+  function playFor(aPerformance) {
+    return plays[aPerformance.playID];
+  }
+
   let totalAmount = 0;
   let volumeCredits = 0;
   let result = `Statement for ${invoice.customer}\n`;
@@ -37,7 +40,7 @@ export function refactorStatement(invoice, plays) {
     minimumFractionDigits: 2,
   }).format;
   for (let perf of invoice.performances) {
-    const play = plays[perf.playID];
+    const play = playFor(perf); // 以查询取代临时变量
     let thisAmount = amountFor(perf, play);
 
     // add volume credits
