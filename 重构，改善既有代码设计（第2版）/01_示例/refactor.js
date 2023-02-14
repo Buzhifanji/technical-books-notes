@@ -6,6 +6,8 @@ export function refactorStatement(invoice, plays) {
   statementData.customer = invoice.customer;
   // 生成副本，避免修改传递过来的数据
   statementData.performances = invoice.performances.map(enrichPerformances);
+  statementData.totalAmount = totalAmount(statementData);
+  statementData.totalVolumeCredits = totalVolumeCredits(statementData);
 
   return renderPlainText(statementData);
 
@@ -52,6 +54,22 @@ export function refactorStatement(invoice, plays) {
 
     return volumeCredits;
   }
+
+  function totalVolumeCredits(data) {
+    let result = 0;
+    for (const perf of data.performances) {
+      result += perf.volumeCredits;
+    }
+    return result;
+  }
+
+  function totalAmount(data) {
+    let result = 0;
+    for (const perf of data.performances) {
+      result += perf.amount;
+    }
+    return result;
+  }
 }
 
 function renderPlainText(data) {
@@ -63,8 +81,8 @@ function renderPlainText(data) {
     } seats)\n`;
   }
 
-  result += `Amount owed is ${usd(totalAmount() / 100)}\n`;
-  result += `You earned ${totalVolumeCredits()} credits\n`;
+  result += `Amount owed is ${usd(data.totalAmount / 100)}\n`;
+  result += `You earned ${data.totalVolumeCredits} credits\n`;
   return result;
 
   function usd(aNumber) {
@@ -73,21 +91,5 @@ function renderPlainText(data) {
       currency: "USD",
       minimumFractionDigits: 2,
     }).format(aNumber);
-  }
-
-  function totalVolumeCredits() {
-    let result = 0;
-    for (const perf of data.performances) {
-      result += perf.volumeCredits;
-    }
-    return result;
-  }
-
-  function totalAmount() {
-    let result = 0;
-    for (const perf of data.performances) {
-      result += perf.amount;
-    }
-    return result;
   }
 }
