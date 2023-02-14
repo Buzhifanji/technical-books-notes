@@ -9,7 +9,7 @@ export function createStatementData(invoice, plays) {
   return statementData;
 
   function enrichPerformances(aPerformance) {
-    const calculator = new PerformanceCalculator(
+    const calculator = createPerformanceCalculator(
       aPerformance,
       playFor(aPerformance)
     );
@@ -72,4 +72,9 @@ class PerformanceCalculator {
 
     return result;
   }
+}
+
+// 工厂函数
+function createPerformanceCalculator(aPerformance, aPlay) {
+  return new PerformanceCalculator(aPerformance, aPlay);
 }
