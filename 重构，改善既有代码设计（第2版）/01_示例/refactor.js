@@ -6,7 +6,7 @@ export function refactorStatement(invoice, plays) {
   statementData.customer = invoice.customer;
   statementData.performances = invoice.performances;
 
-  return renderPlainText(statementData, invoice, plays);
+  return renderPlainText(statementData, plays);
 }
 
 function renderPlainText(data, plays) {
