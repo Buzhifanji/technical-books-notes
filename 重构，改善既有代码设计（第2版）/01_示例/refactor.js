@@ -11,7 +11,7 @@ export function refactorStatement(invoice, plays) {
 
 function renderPlainText(data, plays) {
   let result = `Statement for ${data.customer}\n`;
-  for (let perf of data.performances) {
+  for (const perf of data.performances) {
     // print line for this order
     result += ` ${playFor(perf).name}: ${usd(amountFor(perf) / 100)} (${
       perf.audience
@@ -72,7 +72,7 @@ function renderPlainText(data, plays) {
 
   function totalVolumeCredits() {
     let result = 0;
-    for (let perf of data.performances) {
+    for (const perf of data.performances) {
       result += volumeCreditsFor(perf);
     }
     return result;
@@ -80,7 +80,7 @@ function renderPlainText(data, plays) {
 
   function totalAmount() {
     let result = 0;
-    for (let perf of data.performances) {
+    for (const perf of data.performances) {
       result += amountFor(perf);
     }
     return result;
