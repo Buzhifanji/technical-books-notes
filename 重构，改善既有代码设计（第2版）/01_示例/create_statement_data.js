@@ -43,11 +43,7 @@ class PerformanceCalculator {
     let result = 0;
     switch (this.play.type) {
       case "tragedy":
-        result = 40000;
-        if (this.performance.audience > 30) {
-          result += 1000 * (this.performance.audience - 30);
-        }
-        break;
+        throw "bad thing";
       case "comedy":
         result = 30000;
         if (this.performance.audience > 20) {
@@ -75,6 +71,26 @@ class PerformanceCalculator {
 }
 
 // 工厂函数
+// 以多态取代条件表达式结构
 function createPerformanceCalculator(aPerformance, aPlay) {
-  return new PerformanceCalculator(aPerformance, aPlay);
+  switch (aPlay.type) {
+    case "tragedy":
+      return new TragedyCalculator(aPerformance, aPlay);
+    case "comedy":
+      return new ComedyCalculator(aPerformance, aPlay);
+    default:
+      throw new Error(`unkown type: ${aPlay.type}`);
+  }
 }
+
+class TragedyCalculator extends PerformanceCalculator {
+  get amount() {
+    let result = 40000;
+    if (this.performance.audience > 30) {
+      result += 1000 * (this.performance.audience - 30);
+    }
+    return result;
+  }
+}
+
+class ComedyCalculator extends PerformanceCalculator {}
