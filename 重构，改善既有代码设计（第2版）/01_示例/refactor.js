@@ -2,6 +2,10 @@
  * 这个函数代码组织不清晰
  */
 export function refactorStatement(invoice, plays) {
+  return renderPlainText(createStatementData(invoice, plays));
+}
+
+function createStatementData(invoice, plays) {
   const statementData = {}; // 数据中转，让 renderPlainText 只操作通过 data 参数传进来的数据，这样所有计算代码都可以被挪到 statement 函数中
   statementData.customer = invoice.customer;
   // 生成副本，避免修改传递过来的数据
@@ -9,7 +13,7 @@ export function refactorStatement(invoice, plays) {
   statementData.totalAmount = totalAmount(statementData);
   statementData.totalVolumeCredits = totalVolumeCredits(statementData);
 
-  return renderPlainText(statementData);
+  return statementData;
 
   function enrichPerformances(aPerformance) {
     const result = Object.assign({}, aPerformance);
