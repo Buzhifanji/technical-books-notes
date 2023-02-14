@@ -2,6 +2,10 @@
  * 这个函数代码组织不清晰
  */
 export function refactorStatement(invoice, plays) {
+  return renderPlainText(invoice, plays);
+}
+
+function renderPlainText(invoice, plays) {
   // 提炼函数
   function amountFor(aPerformance) {
     let result = 0;
