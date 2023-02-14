@@ -58,7 +58,7 @@ export function refactorStatement(invoice, plays) {
     return volumeCredits;
   }
 
-  function appleSauce() {
+  function totalAmount() {
     let totalAmount = 0;
     for (let perf of invoice.performances) {
       totalAmount += amountFor(perf);
@@ -73,9 +73,8 @@ export function refactorStatement(invoice, plays) {
       perf.audience
     } seats)\n`;
   }
-  let totalAmount = appleSauce();
 
-  result += `Amount owed is ${usd(totalAmount / 100)}\n`;
+  result += `Amount owed is ${usd(totalAmount() / 100)}\n`;
   result += `You earned ${totalVolumeCredits()} credits\n`;
   return result;
 }
