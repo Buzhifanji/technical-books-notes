@@ -7,7 +7,7 @@ export function refactorStatement(invoice, plays) {
   // 生成副本，避免修改传递过来的数据
   statementData.performances = invoice.performances.map(enrichPerformances);
 
-  return renderPlainText(statementData, plays);
+  return renderPlainText(statementData);
 
   function enrichPerformances(aPerformance) {
     const result = Object.assign({}, aPerformance);
@@ -19,11 +19,11 @@ export function refactorStatement(invoice, plays) {
   }
 }
 
-function renderPlainText(data, plays) {
+function renderPlainText(data) {
   let result = `Statement for ${data.customer}\n`;
   for (const perf of data.performances) {
     // print line for this order
-    result += ` ${playFor(perf).name}: ${usd(amountFor(perf) / 100)} (${
+    result += ` ${perf.play.name}: ${usd(amountFor(perf) / 100)} (${
       perf.audience
     } seats)\n`;
   }
@@ -35,7 +35,7 @@ function renderPlainText(data, plays) {
   // 提炼函数
   function amountFor(aPerformance) {
     let result = 0;
-    switch (playFor(aPerformance).type) {
+    switch (aPerformance.play.type) {
       case "tragedy":
         result = 40000;
         if (aPerformance.audience > 30) {
@@ -50,15 +50,10 @@ function renderPlainText(data, plays) {
         result += 300 * aPerformance.audience;
         break;
       default:
-        throw new Error(`unknown type: ${playFor(aPerformance).type}`);
+        throw new Error(`unknown type: ${aPerformance.play.type}`);
     }
 
     return result;
-  }
-
-  // 以查询取代临时变量
-  function playFor(aPerformance) {
-    return plays[aPerformance.playID];
   }
 
   function volumeCreditsFor(aPerformance) {
@@ -66,7 +61,7 @@ function renderPlainText(data, plays) {
     // add volume credits
     volumeCredits += Math.max(aPerformance.audience - 30, 0);
     // add extra credit for every ten comedy attendees
-    if ("comedy" === playFor(aPerformance).type)
+    if ("comedy" === aPerformance.play.type)
       volumeCredits += Math.floor(aPerformance.audience / 5);
 
     return volumeCredits;
