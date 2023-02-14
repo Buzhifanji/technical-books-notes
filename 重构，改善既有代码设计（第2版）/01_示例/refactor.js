@@ -4,6 +4,7 @@
 export function refactorStatement(invoice, plays) {
   const statementData = {}; // 数据中转，让 renderPlainText 只操作通过 data 参数传进来的数据，这样所有计算代码都可以被挪到 statement 函数中
   statementData.customer = invoice.customer;
+  // 生成副本，避免修改传递过来的数据
   statementData.performances = invoice.performances.map(enrichPerformances);
 
   return renderPlainText(statementData, plays);
