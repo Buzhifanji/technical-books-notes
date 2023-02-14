@@ -4,9 +4,15 @@
 export function refactorStatement(invoice, plays) {
   const statementData = {}; // 数据中转，让 renderPlainText 只操作通过 data 参数传进来的数据，这样所有计算代码都可以被挪到 statement 函数中
   statementData.customer = invoice.customer;
-  statementData.performances = invoice.performances;
+  statementData.performances = invoice.performances.map(enrichPerformances);
 
   return renderPlainText(statementData, plays);
+
+  function enrichPerformances(aPerformance) {
+    const result = Object.assign({}, aPerformance);
+
+    return result;
+  }
 }
 
 function renderPlainText(data, plays) {
